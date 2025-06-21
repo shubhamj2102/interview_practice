@@ -1,5 +1,7 @@
 package practice.stream;
 
+import interview.Person;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
@@ -208,5 +210,85 @@ public class Solution {
     public void fibonacciSeries(){
        var result= Stream.iterate(new int[]{0,1},arr->new int[]{arr[1],arr[0]+arr[1]}).map(arr->arr[0]).limit(10).collect(Collectors.toList());
         System.out.println("fibonacci series= "+result);
+    }
+
+    public void getNamesGroupByAge(){
+        List<interview.Person> personList=List.of(new interview.Person("shubham",1),
+                new interview.Person("shubham1",20),
+                new interview.Person("shubham2",20),
+                new interview.Person("shubham3",30)
+        );
+
+        var map= personList.stream().
+                collect(Collectors.groupingBy(interview.Person::getAge,
+                        Collectors.mapping(Person::getName,Collectors.toList())));
+        System.out.println(map);
+    }
+
+    public void getStringLengthMap(){
+        var list=List.of("shubham","shubham","jfhjake","jhjek","yyy");
+        var map=list.stream().collect(Collectors.toMap(s->s, String::length,(l1, l2)->l1,HashMap::new));
+        System.out.println(map);
+
+    }
+
+    public void getSumOfList(){
+        var list=List.of(1,2,3,4,5);
+       var sum= list.stream().reduce(0,(a,b)->a+b);
+        System.out.println(sum);
+
+    }
+
+    public void extractAllCharacters(){
+        List<String> words = List.of("java", "code");
+
+        var result=words.stream().flatMap(str->Stream.of(str.split(""))).collect(Collectors.toList());
+        System.out.println(result);
+        List<Character> characters = words.stream()
+                .flatMap(word -> word.chars().mapToObj(c -> (char) c))
+                .collect(Collectors.toList());
+        System.out.println(characters);
+
+
+    }
+
+    public void groupByLength(){
+        var list=List.of("shubham","java","john","jkkjk","now");
+        var map=list.stream().collect(Collectors.groupingBy(String::length,Collectors.counting()));
+        System.out.println(map);
+
+    }
+
+    public void calculateDays(){
+        var birthDate=LocalDate.of(1994,2,21);
+        var now=LocalDate.now();
+        var days=ChronoUnit.DAYS.between(birthDate,now);
+        System.out.println(days);
+    }
+
+    public void recordClassDemo(){
+        //Java 17 feature
+        RecordClass obj=new RecordClass("shubham","dev");
+        System.out.println(obj.param1());
+        System.out.println(obj.parm2());
+        System.out.println(obj.hashCode());
+        System.out.println(obj.toString());
+    }
+
+    public void switchDemo(){
+        Object s="shubham";
+        var x=switch (s){
+            case String str-> 5;
+            case Integer i->4;
+            default -> 6;
+        };
+
+        System.out.println(x);
+        /*
+        *
+        * Since s is of type String, the only valid case types are:
+        * String, its subtypes
+        *
+        * */
     }
 }

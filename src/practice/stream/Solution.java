@@ -258,4 +258,37 @@ public class Solution {
         System.out.println(map);
 
     }
+
+    public void calculateDays(){
+        var birthDate=LocalDate.of(1994,2,21);
+        var now=LocalDate.now();
+        var days=ChronoUnit.DAYS.between(birthDate,now);
+        System.out.println(days);
+    }
+
+    public void recordClassDemo(){
+        //Java 17 feature
+        RecordClass obj=new RecordClass("shubham","dev");
+        System.out.println(obj.param1());
+        System.out.println(obj.parm2());
+        System.out.println(obj.hashCode());
+        System.out.println(obj.toString());
+    }
+
+    public void switchDemo(){
+        Object s="shubham";
+        var x=switch (s){
+            case String str-> 5;
+            case Integer i->4;
+            default -> 6;
+        };
+
+        System.out.println(x);
+        /*
+        *
+        * Since s is of type String, the only valid case types are:
+        * String, its subtypes
+        *
+        * */
+    }
 }

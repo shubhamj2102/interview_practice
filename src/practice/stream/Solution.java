@@ -291,4 +291,54 @@ public class Solution {
         *
         * */
     }
+
+    public void mergeMap(){
+        Map<Integer,Integer> map1=new HashMap<>();
+        Map<Integer,Integer> map2=new HashMap<>();
+
+        map1.put(1,10);
+        map1.put(2,30);
+
+        map2.put(2,20);
+        map2.put(3,10);
+
+
+       var result=  Stream.concat(map1.entrySet().stream(),map2.entrySet().stream()).collect(Collectors.toMap(e->e.getKey(),e->e.getValue(),(v1,v2)->v1+v2));
+        var result1=  map1.entrySet().stream().collect(Collectors.toMap(e->e.getKey(),e->e.getValue(),(v1,v2)->v1+v2,()->new HashMap<>(map2)));
+        System.out.println(result1);
+        System.out.println(result);
+    }
+
+    public void merge3Maps(){
+        Map<Integer,Integer> map1=new HashMap<>();
+        Map<Integer,Integer> map2=new HashMap<>();
+        Map<Integer,Integer> map3=new HashMap<>();
+
+        map1.put(1,10);
+        map1.put(2,30);
+
+        map2.put(2,20);
+        map2.put(3,10);
+
+        map3.put(2,40);
+        map3.put(5,60);
+
+      var result=  List.of(map1,map2, map3).stream().flatMap(m->m.entrySet().stream()).collect(Collectors.toMap(e->e.getKey(),e->e.getValue(),(v1,v2)->v1+v2));
+      System.out.println(result);
+      var result1=Stream.concat(map3.entrySet().stream(),Stream.concat(map1.entrySet().stream(),map2.entrySet().stream())).collect(Collectors.toMap(e->e.getKey(),e->e.getValue(),(v1,v2)->v1+v2));
+        System.out.println(result1);
+    }
+
+    public void sortMap(){
+        Map<Integer, Integer> map=new HashMap<>();
+
+        map.put(1,10);
+        map.put(3,20);
+        map.put(5,50);
+        map.put(4,10);
+        map.put(2,100);
+
+       var result= map.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey)).collect(Collectors.toMap(e->e.getKey(), e->e.getValue(),(e1, e2)->e1,LinkedHashMap::new));
+        System.out.println(result);
+    }
 }

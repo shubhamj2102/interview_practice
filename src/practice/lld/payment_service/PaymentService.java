@@ -24,6 +24,6 @@ public class PaymentService {
         logger.log(Level.INFO,"Payment is processed with success="+staus);
       transaction.updatePaymentStatus(staus?PaymentStatus.SUCCESS:PaymentStatus.FAIL);
 
-      //save transaction again in DB
+      //update transaction again in DB
     }
 }

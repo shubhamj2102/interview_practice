@@ -49,7 +49,9 @@ public class Solution {
         var arr1=new int[]{1,3,5,7,8};
         var arr2=new int[]{2,4,6,9};
        var mergedArray= IntStream.concat(Arrays.stream(arr1),Arrays.stream(arr2)).sorted().toArray();
+       var mergedArray2=Stream.concat(Arrays.stream(arr1).boxed(),Arrays.stream(arr2).boxed()).sorted().toArray();
         System.out.println("merged array= "+ Arrays.toString(mergedArray));
+        System.out.println("merged array= "+ Arrays.toString(mergedArray2));
     }
 
     public void mergeSortedList(){
@@ -236,7 +238,6 @@ public class Solution {
         var list=List.of(1,2,3,4,5);
        var sum= list.stream().reduce(0,(a,b)->a+b);
         System.out.println(sum);
-
     }
 
     public void extractAllCharacters(){

@@ -4,5 +4,5 @@ public enum InstrumentType {
 
     BANK,
     CARD,
-    UPI;
+    UPI, WALLET;
 }

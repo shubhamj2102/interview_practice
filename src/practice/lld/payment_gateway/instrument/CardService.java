@@ -1,8 +1,11 @@
 package practice.lld.payment_gateway.instrument;
 
-import java.util.ArrayList;
+public class CardService implements InstrumentService{
+    private final InstrumentRepository instrumentRepository;
 
-public class CardService extends InstrumentService{
+    public CardService(InstrumentRepository instrumentRepository) {
+        this.instrumentRepository = instrumentRepository;
+    }
 
     @Override
     public void addInstrument(InstrumentDao instrumentDao) {
@@ -12,15 +15,14 @@ public class CardService extends InstrumentService{
         var cvv=instrumentDao.getCvv();
         var expiryDate=instrumentDao.getExpiryDate();
         var instrument=new CardInstrument(instrumentId,userId,cardNumber,cvv,expiryDate);
-        instrumentList.putIfAbsent(userId, new ArrayList<>());
-        instrumentList.get(userId).add(instrument);
+        instrumentRepository.save(userId,instrument);
         System.out.println("card instrument is added with instrument id:"+instrumentId);
     }
 
     private int generateInstrumentId(String userId){
-        if(!instrumentList.containsKey(userId)){
+        if(instrumentRepository.findAllByUserId(userId).isEmpty()){
             return 1;
         }
-        return instrumentList.get(userId).getLast().getInstrumentId()+1;
+        return instrumentRepository.findAllByUserId(userId).getLast().getInstrumentId()+1;
     }
 }

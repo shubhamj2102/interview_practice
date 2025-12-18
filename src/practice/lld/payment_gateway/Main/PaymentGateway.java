@@ -1,17 +1,17 @@
 package practice.lld.payment_gateway.Main;
 
 import practice.lld.payment_gateway.instrument.*;
+import practice.lld.payment_gateway.process.InstrumentProcessorResolver;
 import practice.lld.payment_gateway.process.PaymentProcesser;
-import practice.lld.payment_gateway.transaction.Transaction;
 import practice.lld.payment_gateway.transaction.TransactionDao;
+import practice.lld.payment_gateway.transaction.TransactionRepository;
 import practice.lld.payment_gateway.transaction.TransactionService;
 import practice.lld.payment_gateway.user.UserDao;
 import practice.lld.payment_gateway.user.UserService;
 
 import java.time.LocalDate;
-import java.util.List;
 
-public class Main {
+public class PaymentGateway {
 
     public static void main(String[] args) {
 
@@ -29,7 +29,9 @@ public class Main {
         instrumentDao1.setIfscCode("HDFC0000");
         instrumentDao1.setUserId(user1.getUserId());
 
-        InstrumentServiceFactory instrumentServiceFactory=new InstrumentServiceFactory();
+        InstrumentRepository instrumentRepository=new InstrumentRepository();
+
+        InstrumentServiceFactory instrumentServiceFactory=new InstrumentServiceFactory(instrumentRepository);
         InstrumentService instrumentService=instrumentServiceFactory.getInstrumentServiceFactory(instrumentDao1.getInstrumentType());
         instrumentService.addInstrument(instrumentDao1);
 
@@ -45,24 +47,28 @@ public class Main {
         instrumentService2.addInstrument(instrumentDao2);
 
         System.out.println("Instuments of user 1");
-        for(var instrument: InstrumentService.getInstrumentsByUserId(user1.getUserId())){
+        for(var instrument: instrumentRepository.findAllByUserId(user1.getUserId())){
             System.out.println("Instrument type: "+instrument.getInstrumentType().name());
             System.out.println("Instrument id: "+instrument.getInstrumentId());
         }
 
         System.out.println("Instruments of user 2");
-        for(var instrument: InstrumentService.getInstrumentsByUserId(user2.getUserId())){
+        for(var instrument: instrumentRepository.findAllByUserId(user2.getUserId())){
             System.out.println("Instrument type: "+instrument.getInstrumentType().name());
             System.out.println("Instrument id: "+instrument.getInstrumentId());
         }
 
-        TransactionService transactionService=new TransactionService(new PaymentProcesser());
+        var instrumentProcessorResolver=new InstrumentProcessorResolver ();
+        var paymentProcesser=new PaymentProcesser(instrumentProcessorResolver);
+        var transactionRepository=new TransactionRepository();
+
+        TransactionService transactionService=new TransactionService(paymentProcesser,instrumentRepository,transactionRepository);
         TransactionDao transactionDao=new TransactionDao();
         transactionDao.setAmount(344.00);
         transactionDao.setSenderId(user1.getUserId());
         transactionDao.setReceiverId(user2.getUserId());
-        transactionDao.setSenderInstrumentId(InstrumentService.getInstrumentsByUserId(user1.getUserId()).getFirst().getInstrumentId());
-        transactionDao.setReceiverInstrumentId(InstrumentService.getInstrumentsByUserId(user2.getUserId()).getFirst().getInstrumentId());
+        transactionDao.setSenderInstrumentId(instrumentRepository.findAllByUserId(user1.getUserId()).getFirst().getInstrumentId());
+        transactionDao.setReceiverInstrumentId(instrumentRepository.findAllByUserId(user2.getUserId()).getFirst().getInstrumentId());
         transactionDao.setReceiverId(user2.getUserId());
         transactionService.initiateTransaction(transactionDao);
         System.out.println("Transaction is completed");
@@ -70,31 +76,15 @@ public class Main {
         var transactionHistory1= transactionService.getTransactionHistory(user1.getUserId());
 
         System.out.println("Transaction history for user 1:");
-        transactionHistory1.forEach(transaction -> {
-            System.out.println("Transaction:-");
-            System.out.println(transaction.getTransactionId());
-            System.out.println(transaction.getAmount());
-            System.out.println(transaction.getCreatedAt());
-            System.out.println(transaction.getReceiverId());
-            System.out.println(transaction.getSenderId());
-            System.out.println(transaction.getLastUpdatedAt());
-            System.out.println(transaction.getTransactionStatus().name());
-            System.out.println();
+        transactionHistory1.forEach(transactionEntry -> {
+            System.out.println(transactionEntry.getAmount()+ " "+ transactionEntry.getEntryType().name()+"ed"+" at "+transactionEntry.getTimestamp());
         });
 
         var transactionHistory2= transactionService.getTransactionHistory(user2.getUserId());
 
         System.out.println("Transaction history for user 2:");
-        transactionHistory2.forEach(transaction -> {
-            System.out.println("Transaction:-");
-            System.out.println(transaction.getTransactionId());
-            System.out.println(transaction.getAmount());
-            System.out.println(transaction.getCreatedAt());
-            System.out.println(transaction.getReceiverId());
-            System.out.println(transaction.getSenderId());
-            System.out.println(transaction.getLastUpdatedAt());
-            System.out.println(transaction.getTransactionStatus().name());
-            System.out.println();
+        transactionHistory2.forEach(transactionEntry -> {
+            System.out.println(transactionEntry.getAmount()+ " "+ transactionEntry.getEntryType().name()+"ed"+" at "+transactionEntry.getTimestamp());
         });
     }
 

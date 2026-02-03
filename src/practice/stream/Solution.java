@@ -104,7 +104,8 @@ public class Solution {
 
     public void reverseIntArray(){
         var intArr=new int[]{1,2,4,5,6};
-        var reversedArr=Arrays.stream(intArr).boxed().sorted(Comparator.reverseOrder()).mapToInt(num->num).toArray();
+        int n=intArr.length;
+        var reversedArr=IntStream.range(0,n).map(i->intArr[n-i-1]).toArray();
         System.out.println("reversedArray= "+ Arrays.toString(reversedArr));
     }
 
@@ -112,8 +113,8 @@ public class Solution {
         String s1="abcba";
         String s2="abcdef";
 
-       var isPalindrome= IntStream.range(0,(s1.length()/2)-1).allMatch(i->s1.charAt(i)==s1.charAt(s1.length()-i-1));
-       var isPalindrome2=IntStream.range(0,(s2.length()/2)-1).allMatch(i->s2.charAt(i)==s2.charAt(s2.length()-i-1));
+       var isPalindrome= IntStream.range(0,(s1.length()/2)).allMatch(i->s1.charAt(i)==s1.charAt(s1.length()-i-1));
+       var isPalindrome2=IntStream.range(0,(s2.length()/2)).allMatch(i->s2.charAt(i)==s2.charAt(s2.length()-i-1));
         System.out.println("abcba is "+(isPalindrome?"palindrome":"not palindrome"));
         System.out.println("abcdef is "+(isPalindrome2?"palindrome":"not palindrome"));
     }
@@ -144,8 +145,13 @@ public class Solution {
 
     public void stringJoining(){
         var strArr=List.of("prefix", "delimiter","suffix");
-       var joinedString= strArr.stream().collect(Collectors.joining());
+       var joinedString= strArr.stream().collect(Collectors.joining("."));
         System.out.println("Joined= "+joinedString);
+
+        var strArr2=List.of("shubham", "d","jain");
+
+        var res2= strArr2.stream().collect(Collectors.joining(".","email:","@gmail.com"));
+        System.out.println(res2);
     }
 
     public void getMinMax(){
@@ -257,7 +263,6 @@ public class Solution {
         var list=List.of("shubham","java","john","jkkjk","now");
         var map=list.stream().collect(Collectors.groupingBy(String::length,Collectors.counting()));
         System.out.println(map);
-
     }
 
     public void calculateDays(){
@@ -291,6 +296,15 @@ public class Solution {
         * String, its subtypes
         *
         * */
+    }
+
+    private static String determineDayType(String day){
+
+        return switch (day){
+            case "MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY"->"week days";
+            case "SATURDAY","SUNDAY"->"weekend";
+            default -> "undetermined";
+        };
     }
 
     public void mergeMap(){
@@ -340,6 +354,11 @@ public class Solution {
         map.put(2,100);
 
        var result= map.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey)).collect(Collectors.toMap(e->e.getKey(), e->e.getValue(),(e1, e2)->e1,LinkedHashMap::new));
-        System.out.println(result);
+       System.out.println(result);
+    }
+
+    public void getPrimeNumbers(){
+        var res=IntStream.range(1,100).filter(i->i>1 && IntStream.range(2,i-1).noneMatch(j->i%j==0)).toArray();
+        System.out.println(Arrays.toString(res));
     }
 }

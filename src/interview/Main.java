@@ -1,28 +1,18 @@
 package interview;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 public class Main  {
     public static void main(String[] args) {
+        // prime numbers using stream
 
-        // How to create object;
-        // syntex
-        // class_Name obj_name=new class_name();
-
-        Invoice antimaInvoice=new Invoice();
-
-        antimaInvoice.setAmount(1000);
-        antimaInvoice.setName("Antima");
-
-        Invoice shubhamInvoice=new Invoice();
-        shubhamInvoice.setAmount(200);
-        shubhamInvoice.setName("kukkuda");
-
-        Invoice madhuInvoice=new Invoice();
-        madhuInvoice.setAmount(300);
-        madhuInvoice.setName("cd");
-
-        antimaInvoice.printDetails();
-        shubhamInvoice.printDetails();
-        madhuInvoice.printDetails();
-
+        var res=IntStream.range(1,100).filter(i->i>1 && IntStream.range(2,i-1).noneMatch(j->i%j==0)).toArray();
+        System.out.println(Arrays.toString(res));
     }
+
 }

@@ -1,6 +1,6 @@
-package practice.stream;
+package practice.java_17_feature.other;
 
-public record  RecordClass (String param1, String parm2){
+public record User(String name, int age) {
     //immutable
     //final class
     //has constructor and getter method

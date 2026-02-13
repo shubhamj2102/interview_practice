@@ -1,7 +1,5 @@
 package practice.stream;
 
-import interview.Person;
-
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
@@ -221,14 +219,14 @@ public class Solution {
     }
 
     public void getNamesGroupByAge(){
-        List<interview.Person> personList=List.of(new interview.Person("shubham",1),
-                new interview.Person("shubham1",20),
-                new interview.Person("shubham2",20),
-                new interview.Person("shubham3",30)
+        List<Person> personList=List.of(new Person("shubham",1),
+                new Person("shubham1",20),
+                new Person("shubham2",20),
+                new Person("shubham3",30)
         );
 
         var map= personList.stream().
-                collect(Collectors.groupingBy(interview.Person::getAge,
+                collect(Collectors.groupingBy(Person::getAge,
                         Collectors.mapping(Person::getName,Collectors.toList())));
         System.out.println(map);
     }

@@ -12,7 +12,7 @@ public class main {
             if (method.getParameterCount() == 0 && method.getReturnType() == void.class) {// ← this line is required for private methods
                 System.out.println("Method name- "+method.getName());
                 System.out.println("solution-");
-                method.invoke(sol);      // use `null` if method is static, or an object if non-static
+                method.invoke(sol);   // use `null` if method is static, or an object if non-static
             }
         }
     }

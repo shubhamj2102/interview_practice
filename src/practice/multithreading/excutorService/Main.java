@@ -33,9 +33,5 @@ public class Main {
             return list1;
         });
 
-
-
-
-
     }
 }

@@ -14,6 +14,5 @@ public class Main {
 
         System.out.println(deserializeObj.getName());
         System.out.println(deserializeObj.getEmail());
-
     }
 }

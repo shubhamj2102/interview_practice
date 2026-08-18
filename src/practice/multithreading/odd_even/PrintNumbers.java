@@ -19,7 +19,6 @@ public class PrintNumbers {
             }
             else{
                 try {
-
                     wait();
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);

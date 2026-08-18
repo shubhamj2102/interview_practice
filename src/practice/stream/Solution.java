@@ -359,4 +359,25 @@ public class Solution {
         var res=IntStream.range(1,100).filter(i->i>1 && IntStream.range(2,i-1).noneMatch(j->i%j==0)).toArray();
         System.out.println(Arrays.toString(res));
     }
+
+    public void mostFrequentNumber(){
+        List<Integer> nums =
+                List.of(1, 2, 2, 3, 3,3, 4, 4);
+
+      var res=  nums.stream().collect(Collectors.groupingBy(i->i,Collectors.counting()))
+              .entrySet().stream().max(Comparator.comparing(Map.Entry::getValue)).map(Map.Entry::getKey).get();
+
+        System.out.println(res);
+    }
+
+
+    public void validIntegers(){
+        List<String> input=List.of("zz","376","-302","2xy");
+        var res= input.stream().filter(str->!str.isEmpty()).filter(str->str.charAt(0)=='-'  ?
+                str.length()>1 && str.substring(1).chars().allMatch(Character::isDigit):
+                str.chars().allMatch(Character::isDigit) ).toList();
+        System.out.println(res);
+
+    }
+
 }

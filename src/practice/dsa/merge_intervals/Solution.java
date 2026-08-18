@@ -20,6 +20,7 @@ package practice.dsa.merge_intervals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,39 +41,40 @@ import java.util.stream.Collectors;
  * **/
 public class Solution {
 
-    public List<List<Integer>> mergeInterval(int[][] intervals){
+    public int[][] merge(int[][] intervals) {
 
-        if(intervals.length<=1){
-            return Arrays.stream(intervals).map(i->Arrays.stream(i).boxed().collect(Collectors.toList())).toList();
+        int m=intervals.length;
 
+        if(m==0){
+            return new int[][]{{}};
         }
-       List<List<Integer>> mergedList=new ArrayList<>();
-        Arrays.sort(intervals, (i1,i2)->{
-            if(i1[0]==i2[0]){
-                return i1[1]-i2[1];
-            }
-            return i1[0]-i2[0];
-        });
-        List<Integer> currInterval=new ArrayList<>();
-        currInterval.add(intervals[0][0]);
-        currInterval.add(intervals[0][1]);
-        mergedList.add(currInterval);
 
-        int currIndex=0;
-        for(int i=1;i<intervals.length;i++){
-            int[] interval=intervals[i];
-            if(interval[0]<=mergedList.get(currIndex).get(1)){
-                mergedList.get(currIndex).set(1,interval[1]);
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+
+        List<List<Integer>> mergedList=new ArrayList<>();
+
+        addInterval(intervals[0][0],intervals[0][1],mergedList);
+        int currIdx=0;
+
+        for(int i=1;i<m;i++){
+            if(mergedList.get(currIdx).get(1)>=intervals[i][0]){
+                mergedList.get(currIdx).set(1,Math.max(intervals[i][1],mergedList.get(currIdx).get(1)));
             }
-            else {
-                currInterval=new ArrayList<>();
-                currInterval.add(intervals[i][0]);
-                currInterval.add(intervals[i][1]);
-                mergedList.add(currInterval);
-                currIndex++;
+            else{
+                addInterval(intervals[i][0],intervals[i][1],mergedList);
+                currIdx++;
             }
         }
 
-        return mergedList;
+        return mergedList.stream().map(intv->new int[]{intv.get(0),intv.get(1)}).toArray(int[][]::new);
+
+
+    }
+
+    private void addInterval(int start, int end, List<List<Integer>> mergedList){
+        List<Integer>  interval=new ArrayList<>();
+        interval.add(start);
+        interval.add(end);
+        mergedList.add(interval);
     }
 }
